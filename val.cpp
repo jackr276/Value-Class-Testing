@@ -81,6 +81,7 @@ switch(GetType()){
     }
 }
 
+/*
 //Comparing "this" with op
 Value Value::operator==(const Value& op) const {
     //Check the cases for when types are equal first
@@ -103,6 +104,46 @@ Value Value::operator==(const Value& op) const {
     }
 
     //Just like the /operator, we can use casting to compare reals and ints
+    if (IsReal() && op.IsInt()){
+        //Cast op to be broader
+        return Value(GetReal() == (float)op.GetInt());
+    }
+
+    if (IsInt() && op.IsReal()){
+        //in this case cast the current object to be broader
+        return Value((float)GetInt() == op.GetReal());
+    }
+
+    //If we get here, something went wrong so just return an empty value
+    return Value();
+}
+*/
+
+
+//Comparing "this" with op
+Value Value::operator==(const Value& op) const {
+    //Check the cases for when types are equal first
+    if (GetType() == op.GetType()){
+        switch(GetType()){
+            case VINT:
+                return Value(GetInt() == op.GetInt());
+            
+            case VREAL:
+                return Value(GetReal() == op.GetReal());
+            
+            case VSTRING:
+                return Value(GetString() == op.GetString());
+
+            case VBOOL:
+                return Value(GetBool() == op.GetBool());
+
+            default:
+                //we should never get here in theory, added to avoid compile warnings on Vocareum
+                return Value();
+        }
+    }
+    
+    //There are two special cases were we can mix ints and reals in either order
     if (IsReal() && op.IsInt()){
         //Cast op to be broader
         return Value(GetReal() == (float)op.GetInt());
