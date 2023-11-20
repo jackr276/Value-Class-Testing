@@ -10,6 +10,7 @@
 
 using namespace std;
 
+/*
 //For this operator, divide op from "this"
 Value Value::operator/(const Value& op) const{
     //When we saw GetType(), think of it as this->GetType()
@@ -37,6 +38,47 @@ Value Value::operator/(const Value& op) const{
 
     //If we get here, we have some string or booleans, which are invalid
     return Value();
+}
+*/
+
+
+//division may occur only between ints and reals
+Value Value::operator/(const Value& op) const{
+switch(GetType()){
+        //If we have an int, we can add with either a real or an int
+        case VINT:
+            if(op.GetType() == VINT){
+                //we can have two ints, no casting needed
+                return Value(GetInt() / op.GetInt());
+            }
+
+            if (op.GetType() == VREAL){
+                //here we'll need to cast to the broader type
+                return Value((float)GetInt() / op.GetReal());
+            }
+            
+            //If we get here, op was either a string or a float and therefore invalid
+            return Value();
+
+        //If we have an int, we can add with either a real or an int
+        case VREAL:
+            if(op.GetType() == VINT){
+                //cast to a float
+                return Value(GetReal() / (float)op.GetInt());
+            }
+
+            if (op.GetType() == VREAL){
+                //no need for casting here
+                return Value(GetReal() / op.GetReal());
+            }
+            
+            //If we get here, op was either a string or a float and therefore invalid
+            return Value();
+
+        default:
+        //If we get here, this object was either a string or boolean and therefore invalid
+            return Value();
+    }
 }
 
 //Comparing "this" with op
