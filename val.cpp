@@ -56,9 +56,6 @@ switch(GetType()){
                 //here we'll need to cast to the broader type
                 return Value((float)GetInt() / op.GetReal());
             }
-            
-            //If we get here, op was either a string or a float and therefore invalid
-            return Value();
 
         //If we have an int, we can add with either a real or an int
         case VREAL:
@@ -71,14 +68,14 @@ switch(GetType()){
                 //no need for casting here
                 return Value(GetReal() / op.GetReal());
             }
-            
-            //If we get here, op was either a string or a float and therefore invalid
-            return Value();
 
         default:
         //If we get here, this object was either a string or boolean and therefore invalid
             return Value();
     }
+       
+    //If we get here, op was either a string or a float and therefore invalid
+    return Value();
 }
 
 /*
